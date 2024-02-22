@@ -5,17 +5,16 @@ import dev.prefex.safenetherspawn.util.SafeSpawn;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.NotImplementedException;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -46,7 +45,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
 		spawnPointDimension = World.NETHER;
 		BlockPos blockPos = world.getSpawnPos();
-		if (world.getDimension().isUltrawarm() && world.getServer().getSaveProperties().getGameMode() != GameMode.ADVENTURE) {
+		if (world.getDimension().ultrawarm() && world.getServer().getSaveProperties().getGameMode() != GameMode.ADVENTURE) {
 			int i = Math.max(0, server.getSpawnRadius(world));
 			int j = MathHelper.floor(world.getWorldBorder().getDistanceInsideBorder((double)blockPos.getX(), (double)blockPos.getZ()));
 			if (j < i) {
@@ -93,7 +92,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 			return;
 		}
 		teleport(world, getPos().getX(), getPos().getY(),getPos().getZ(),0,0);
-		if (world.getBlockState(getBlockPos()).getMaterial().isLiquid()){
+		if (world.getBlockState(getBlockPos()).isLiquid()){
 			this.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 30));
 		}
 	}
